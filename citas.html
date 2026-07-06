@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citas - FonoApp</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f3e8ff;
+}
+
+.menu{
+    width:250px;
+    height:100vh;
+    background:#7b2cbf;
+    position:fixed;
+    padding-top:30px;
+}
+
+.menu h2{
+    color:white;
+    text-align:center;
+}
+
+.menu a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+}
+
+.menu a:hover{
+    background:#9d4edd;
+}
+
+.contenido{
+    margin-left:270px;
+    padding:40px;
+}
+
+.formulario{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    max-width:800px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+}
+
+input, select{
+    width:95%;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    background:#c77dff;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#9d4edd;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#7b2cbf;
+    color:white;
+    padding:12px;
+}
+
+td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="menu">
+
+    <h2>FonoApp</h2>
+
+    <a href="dashboard.html">🏠 Inicio</a>
+    <a href="pacientes.html">👩‍⚕️ Pacientes</a>
+    <a href="citas.html">📅 Citas</a>
+    <a href="agenda.html">🗓️ Agenda</a>
+    <a href="historial.html">📋 Historia Clínica</a>
+
+</div>
+
+<div class="contenido">
+
+<div class="formulario">
+
+<h1>📅 Agendar Cita</h1>
+
+<input id="paciente" type="text" placeholder="Nombre del paciente">
+
+<input id="fecha" type="date">
+
+<input id="hora" type="time">
+
+<select id="terapia">
+    <option>Tipo de terapia</option>
+    <option>Lenguaje</option>
+    <option>Habla</option>
+    <option>Audición</option>
+    <option>Voz</option>
+</select>
+
+<button onclick="guardarCita()">
+Guardar Cita
+</button>
+
+<h2>Lista de Citas</h2>
+
+<table id="tablaCitas">
+
+<tr>
+    <th>Paciente</th>
+    <th>Fecha</th>
+    <th>Hora</th>
+    <th>Terapia</th>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+function guardarCita(){
+
+    let paciente = document.getElementById("paciente").value;
+    let fecha = document.getElementById("fecha").value;
+    let hora = document.getElementById("hora").value;
+    let terapia = document.getElementById("terapia").value;
+
+    if(
+        paciente === "" ||
+        fecha === "" ||
+        hora === ""
+    ){
+        alert("Complete todos los datos");
+        return;
+    }
+
+    let tabla = document.getElementById("tablaCitas");
+
+    let fila = tabla.insertRow(-1);
+
+    fila.insertCell(0).innerHTML = paciente;
+    fila.insertCell(1).innerHTML = fecha;
+    fila.insertCell(2).innerHTML = hora;
+    fila.insertCell(3).innerHTML = terapia;
+
+    guardarCitas();
+
+    document.getElementById("paciente").value = "";
+    document.getElementById("fecha").value = "";
+    document.getElementById("hora").value = "";
+    document.getElementById("terapia").selectedIndex = 0;
+}
+
+function guardarCitas(){
+
+    let datos =
+        document.getElementById("tablaCitas").innerHTML;
+
+    localStorage.setItem("citas", datos);
+}
+
+window.onload = function(){
+
+    let datosGuardados =
+        localStorage.getItem("citas");
+
+    if(datosGuardados){
+        document.getElementById("tablaCitas").innerHTML =
+        datosGuardados;
+    }
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacientes - FonoApp</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f3e8ff;
+}
+
+.menu{
+    width:250px;
+    height:100vh;
+    background:#7b2cbf;
+    position:fixed;
+    padding-top:30px;
+}
+
+.menu h2{
+    color:white;
+    text-align:center;
+}
+
+.menu a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+}
+
+.menu a:hover{
+    background:#9d4edd;
+}
+
+.contenido{
+    margin-left:270px;
+    padding:40px;
+}
+
+.formulario{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    max-width:900px;
+}
+
+input{
+    width:95%;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    background:#c77dff;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#9d4edd;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+
+th{
+    background:#7b2cbf;
+    color:white;
+    padding:12px;
+}
+
+td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="menu">
+
+    <h2>FonoApp</h2>
+
+    <a href="dashboard.html">🏠 Inicio</a>
+    <a href="pacientes.html">👩‍⚕️ Pacientes</a>
+    <a href="citas.html">📅 Citas</a>
+    <a href="agenda.html">🗓️ Agenda</a>
+    <a href="historial.html">📋 Historia Clínica</a>
+
+</div>
+
+<div class="contenido">
+
+<div class="formulario">
+
+<h1>Registro de Pacientes</h1>
+
+<input id="nombre" type="text" placeholder="Nombre completo">
+
+<input id="documento" type="text" placeholder="Documento">
+
+<input id="telefono" type="text" placeholder="Teléfono">
+
+<input id="edad" type="number" placeholder="Edad">
+
+<button onclick="guardarPaciente()">
+Guardar Paciente
+</button>
+
+<h2>Lista de Pacientes</h2>
+
+<input
+id="buscarPaciente"
+type="text"
+placeholder="🔍 Buscar paciente..."
+onkeyup="buscarPaciente()">
+
+<table id="tablaPacientes">
+
+<tr>
+    <th>Nombre</th>
+    <th>Documento</th>
+    <th>Teléfono</th>
+    <th>Edad</th>
+    <th>Acciones</th>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+function guardarPaciente(){
+
+    let nombre =
+    document.getElementById("nombre").value;
+
+    let documento =
+    document.getElementById("documento").value;
+
+    let telefono =
+    document.getElementById("telefono").value;
+
+    let edad =
+    document.getElementById("edad").value;
+
+    if(nombre === "" || documento === ""){
+        alert("Complete los datos");
+        return;
+    }
+
+    let tabla =
+    document.getElementById("tablaPacientes");
+
+    let fila =
+    tabla.insertRow(-1);
+
+   fila.insertCell(0).innerHTML =
+"<span onclick=\"abrirHistorial('" + nombre + "')\" style='color:#7b2cbf; font-weight:bold; cursor:pointer; text-decoration:underline;'>" +
+nombre +
+"</span>";
+    fila.insertCell(1).innerHTML = documento;
+    fila.insertCell(2).innerHTML = telefono;
+    fila.insertCell(3).innerHTML = edad;
+
+    fila.insertCell(4).innerHTML =
+    "<button onclick=\"abrirHistorial('" + nombre + "')\">📋 Historial</button> " +
+    "<button onclick='eliminarPaciente(this)'>🗑️ Eliminar</button>";
+
+    guardarPacientes();
+
+    document.getElementById("nombre").value="";
+    document.getElementById("documento").value="";
+    document.getElementById("telefono").value="";
+    document.getElementById("edad").value="";
+}
+
+function abrirHistorial(nombre){
+
+    localStorage.setItem(
+        "pacienteActual",
+        nombre
+    );
+
+    window.location.href =
+    "historial.html";
+}
+
+function eliminarPaciente(boton){
+
+    let fila =
+    boton.parentNode.parentNode;
+
+    fila.remove();
+
+    guardarPacientes();
+}
+
+function guardarPacientes(){
+
+    localStorage.setItem(
+        "pacientes",
+        document.getElementById(
+            "tablaPacientes"
+        ).innerHTML
+    );
+}
+
+function buscarPaciente(){
+
+    let filtro =
+    document.getElementById(
+        "buscarPaciente"
+    ).value.toUpperCase();
+
+    let tabla =
+    document.getElementById(
+        "tablaPacientes"
+    );
+
+    let filas =
+    tabla.getElementsByTagName("tr");
+
+    for(let i=1; i<filas.length; i++){
+
+        let td =
+        filas[i].getElementsByTagName("td")[0];
+
+        if(td){
+
+            let texto =
+            td.textContent ||
+            td.innerText;
+
+            if(
+                texto.toUpperCase()
+                .indexOf(filtro) > -1
+            ){
+                filas[i].style.display = "";
+            }else{
+                filas[i].style.display = "none";
+            }
+        }
+    }
+}
+
+window.onload = function(){
+
+    let datos =
+    localStorage.getItem("pacientes");
+
+    if(datos){
+
+        document.getElementById(
+            "tablaPacientes"
+        ).innerHTML = datos;
+    }
+}
+
+</script>
+
+</body>
+</html>

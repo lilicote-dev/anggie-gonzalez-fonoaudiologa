@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Tono App</title>
+
+<style>
+
+body{
+    background:#f3e8ff;
+    font-family:Arial;
+}
+
+.login{
+    width:90%;
+    max-width:400px;
+    background:white;
+    margin:100px auto;
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0px 0px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    color:#7b2cbf;
+}
+
+input{
+    width:90%;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    background:#c77dff;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:15px;
+    font-size:18px;
+    cursor:pointer;
+    margin-top:15px;
+}
+
+button:hover{
+    background:#9d4edd;
+}
+
+a{
+    color:#7b2cbf;
+    text-decoration:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="login">
+
+    <h1>Iniciar Sesión</h1>
+
+    <input id="correo"
+           type="text"
+           placeholder="Correo electrónico">
+
+    <input id="clave"
+           type="password"
+           placeholder="Contraseña">
+
+    <button onclick="iniciarSesion()">
+        Entrar
+    </button>
+
+    <p>
+        ¿No tienes cuenta?
+        <a href="registro.html">
+            Crear cuenta
+        </a>
+    </p>
+
+</div>
+
+<script>
+
+function iniciarSesion(){
+
+    let correo =
+        document.getElementById("correo").value.trim();
+
+    let clave =
+        document.getElementById("clave").value.trim();
+
+    // Administrador
+    if(correo === "admin@fonoapp.com" &&
+       clave === "12345"){
+
+        window.location.href = "dashboard.html";
+        return;
+    }
+
+    // Usuarios registrados
+    let usuarios =
+        JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    let usuarioEncontrado = usuarios.find(
+        usuario =>
+            usuario.correo === correo &&
+            usuario.clave === clave
+    );
+
+    if(usuarioEncontrado){
+
+        alert(
+            "Bienvenido " +
+            usuarioEncontrado.nombre
+        );
+
+        window.location.href = "dashboard.html";
+
+    }else{
+
+        alert("Correo o contraseña incorrectos");
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

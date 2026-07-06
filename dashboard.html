@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+
+<title>Dashboard - FonoApp</title>
+
+<style>
+
+  
+
+
+body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    background:#f3e8ff;font-family:Trebuchet MS;
+}
+
+.menu{
+    width:250px;
+    height:100vh;
+    background:linear-gradient(to bottom,#7b2cbf,#c77dff);
+    position:fixed;
+    padding-top:30px;
+}
+
+.menu h2{
+    color:white;
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.menu a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+    font-size:18px;
+    transition:0.3s;
+}
+
+.menu a:hover{
+    background:rgba(255,255,255,0.2);
+    padding-left:25px;
+    transition:0.3s;
+
+}
+
+.contenido{
+    margin-left:270px;
+    padding:40px;
+}
+
+.bienvenida{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+}
+
+.bienvenida h1{
+    color:#7b2cbf;
+    font-size:40px;
+}
+
+.bienvenida p{
+    font-size:18px;
+    color:#555;
+}
+
+.tarjetas{
+    display:flex;
+    gap:25px;
+    margin-top:30px;
+}
+
+.tarjeta{
+    width:220px;
+    padding:30px;
+    border-radius:25px;
+    text-align:center;
+    color:white;
+    backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.2);
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0px 8px 20px rgba(0,0,0,0.15);
+    transition:0.3s;
+
+}
+
+.tarjeta:hover{
+    transform:translateY(-10px);
+}
+
+.reloj{
+    margin-top:20px;
+    color:#7b2cbf;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="menu">
+
+    <h2>FonoApp</h2>
+
+    <a href="dashboard.html">🏠 Inicio</a>
+
+    <a href="pacientes.html">👩‍⚕️ Pacientes</a>
+
+    <a href="citas.html">📅 Citas</a>
+
+    <a href="agenda.html">🗓️ Agenda</a>
+
+    <a href="#">🎮 Recompensas</a>
+<a href="historial.html">📋 Historia Clínica</a>
+</div>
+
+<div class="contenido">
+
+    <div class="bienvenida">
+
+        <h1>
+            ✨ Bienvenida a FonoApp 👩‍⚕️
+        </h1>
+
+        <p>
+            Gestiona pacientes, terapias y citas de manera fácil y profesional.
+        </p>
+<div class="reloj">
+    <h3 id="fecha"></h3>
+    <h2 id="reloj"></h2>
+</div>
+ <div class="tarjetas">
+
+    <div class="tarjeta" style="background:#c77dff;">
+        <h1>👩‍⚕️</h1>
+        <h2>Pacientes</h2>
+        <p id="totalPacientes">0 registrados</p>
+    </div>
+
+    <div class="tarjeta" style="background:#7b2cbf;">
+        <h1>📅</h1>
+        <h2>Citas</h2>
+        <p id="totalCitas">0 citas</p>
+    </div>
+
+    <div class="tarjeta" style="background:#c77dff;">
+        <h1>🧠</h1>
+        <h2>Terapias</h2>
+        <p>12 activas</p>
+    </div>
+
+</div>
+    
+
+</div>
+
+</div>
+
+<script>
+    
+
+function actualizarReloj(){
+
+    let fecha = new Date();
+
+    document.getElementById("reloj").innerHTML =
+    fecha.toLocaleTimeString();
+
+    document.getElementById("fecha").innerHTML =
+    fecha.toLocaleDateString();
+
+}
+
+actualizarReloj();
+
+setInterval(actualizarReloj,1000);
+window.onload = function(){
+
+    let pacientes = localStorage.getItem("pacientes");
+    let citas = localStorage.getItem("citas");
+
+    let totalPacientes = 0;
+    let totalCitas = 0;
+
+    if(pacientes){
+        totalPacientes =
+        (pacientes.match(/<tr>/g) || []).length - 1;
+    }
+
+    if(citas){
+        totalCitas =
+        (citas.match(/<tr>/g) || []).length - 1;
+    }
+
+    document.getElementById("totalPacientes").innerHTML =
+        totalPacientes + " registrados";
+
+    document.getElementById("totalCitas").innerHTML =
+        totalCitas + " citas";
+
+    actualizarReloj();
+    setInterval(actualizarReloj,1000);
+}
+
+    let totalCitas =
+        tabla2.getElementsByTagName("tr").length - 1;
+
+    document.getElementById("totalCitas").innerHTML =
+        totalCitas + " citas";
+
+
+
+</script>
+
+</body>
+
+</html>

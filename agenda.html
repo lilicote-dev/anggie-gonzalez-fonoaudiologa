@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Tono App</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#f3e8ff;
+        }
+
+        .menu{
+            width:250px;
+            height:100vh;
+            background:#7b2cbf;
+            position:fixed;
+            padding-top:30px;
+        }
+
+        .menu h2{
+            color:white;
+            text-align:center;
+        }
+
+        .menu a{
+            display:block;
+            color:white;
+            text-decoration:none;
+            padding:15px;
+            margin:10px;
+            border-radius:10px;
+        }
+
+        .menu a:hover{
+            background:#9d4edd;
+        }
+
+        .contenido{
+            margin-left:270px;
+            padding:40px;
+        }
+
+        .agenda{
+            background:white;
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th{
+            background:#c77dff;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:15px;
+            background:#f9f2ff;
+            text-align:center;
+            border-bottom:1px solid #ddd;
+        }
+
+        .cancelar{
+            background:#ff4d6d;
+            color:white;
+            border:none;
+            padding:10px 15px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="menu">
+
+        <h2>Tono App</h2>
+
+        <a href="dashboard.html">Inicio</a>
+
+        <a href="pacientes.html">Pacientes</a>
+
+        <a href="citas.html">Citas</a>
+
+        <a href="agenda.html">Agenda</a>
+<a href="historial.html">📋 Historia Clínica</a>
+    </div>
+
+    <div class="contenido">
+
+        <div class="agenda">
+
+            <h1>Agenda de Citas</h1>
+<div id="recordatorio"></div>
+            <table id="tablaAgenda">
+
+    <tr>
+        <th>Paciente</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Terapia</th>
+    </tr>
+
+</table>
+
+        </div>
+
+    </div>
+<script>
+window.onload = function(){
+
+    let citas = localStorage.getItem("citas");
+
+    if(citas){
+        document.getElementById("tablaAgenda").innerHTML = citas;
+    }
+
+    let hoy = new Date().toISOString().split("T")[0];
+
+    let filas =
+        document.getElementById("tablaAgenda")
+        .getElementsByTagName("tr");
+
+    let mensaje = "";
+
+    for(let i = 1; i < filas.length; i++){
+
+        let paciente = filas[i].cells[0].innerText;
+        let fecha = filas[i].cells[1].innerText;
+        let hora = filas[i].cells[2].innerText;
+
+        if(fecha === hoy){
+            mensaje += "🔔 " + paciente +
+                        " tiene una cita a las " +
+                        hora + "<br>";
+        }
+    }
+
+    if(mensaje !== ""){
+        document.getElementById("recordatorio").innerHTML =
+            mensaje;
+
+        document.getElementById("recordatorio").style.background =
+            "#fff3cd";
+
+        document.getElementById("recordatorio").style.padding =
+            "15px";
+
+        document.getElementById("recordatorio").style.borderRadius =
+            "10px";
+
+        document.getElementById("recordatorio").style.marginBottom =
+            "20px";
+    }else{
+        document.getElementById("recordatorio").innerHTML =
+            "📅 Hoy no tienes citas programadas.";
+    }
+}
+</script>

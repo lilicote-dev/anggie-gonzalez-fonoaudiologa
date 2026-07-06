@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Historia Clínica - FonoApp</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f3e8ff;
+}
+
+.menu{
+    width:250px;
+    height:100vh;
+    background:#7b2cbf;
+    position:fixed;
+    padding-top:30px;
+}
+
+.menu h2{
+    color:white;
+    text-align:center;
+}
+
+.menu a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin:10px;
+}
+
+.menu a:hover{
+    background:#9d4edd;
+}
+
+.contenido{
+    margin-left:270px;
+    padding:40px;
+}
+
+.historial{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+}
+
+input, textarea{
+    width:95%;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+textarea{
+    height:100px;
+}
+
+button{
+    background:#c77dff;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#9d4edd;
+}
+
+.tarjetaHistorial{
+    background:#f9f2ff;
+    padding:20px;
+    margin-top:20px;
+    border-radius:15px;
+    border-left:6px solid #7b2cbf;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="menu">
+
+    <h2>FonoApp</h2>
+
+    <a href="dashboard.html">🏠 Inicio</a>
+    <a href="pacientes.html">👩‍⚕️ Pacientes</a>
+    <a href="citas.html">📅 Citas</a>
+    <a href="agenda.html">🗓️ Agenda</a>
+    <a href="historial.html">📋 Historia Clínica</a>
+
+</div>
+
+<div class="contenido">
+
+<div class="historial">
+
+<h1>📋 Historia Clínica</h1>
+
+<input id="paciente" type="text"
+placeholder="Nombre del paciente">
+
+<textarea id="diagnostico"
+placeholder="Diagnóstico"></textarea>
+
+<textarea id="objetivos"
+placeholder="Objetivos de terapia"></textarea>
+
+<textarea id="evolucion"
+placeholder="Evolución"></textarea>
+
+<textarea id="observaciones"
+placeholder="Observaciones"></textarea>
+
+<input id="proxima"
+type="date">
+
+<button onclick="guardarHistorial()">
+Guardar Historial
+</button>
+
+<h2>Historiales Guardados</h2>
+
+<div id="listaHistoriales"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function guardarHistorial(){
+
+    let historial = {
+
+        paciente:
+        document.getElementById("paciente").value,
+
+        diagnostico:
+        document.getElementById("diagnostico").value,
+
+        objetivos:
+        document.getElementById("objetivos").value,
+
+        evolucion:
+        document.getElementById("evolucion").value,
+
+        observaciones:
+        document.getElementById("observaciones").value,
+
+        proxima:
+        document.getElementById("proxima").value
+    };
+
+    let historiales =
+    JSON.parse(localStorage.getItem("historiales")) || [];
+
+    historiales.push(historial);
+
+    localStorage.setItem(
+        "historiales",
+        JSON.stringify(historiales)
+    );
+
+    alert("Historial guardado correctamente");
+
+    mostrarHistoriales();
+
+    document.getElementById("diagnostico").value = "";
+    document.getElementById("objetivos").value = "";
+    document.getElementById("evolucion").value = "";
+    document.getElementById("observaciones").value = "";
+    document.getElementById("proxima").value = "";
+}
+
+function mostrarHistoriales(){
+
+    let historiales =
+    JSON.parse(localStorage.getItem("historiales")) || [];
+
+    let lista =
+    document.getElementById("listaHistoriales");
+
+    lista.innerHTML = "";
+
+   let pacienteActual =
+localStorage.getItem("pacienteActual");
+
+historiales.forEach(function(historial){
+
+    if(
+        pacienteActual &&
+        historial.paciente !== pacienteActual
+    ){
+        return;
+    }
+        lista.innerHTML += `
+
+        <div class="tarjetaHistorial">
+
+            <h3>👩‍⚕️ ${historial.paciente}</h3>
+
+            <p><b>Diagnóstico:</b>
+            ${historial.diagnostico}</p>
+
+            <p><b>Objetivos:</b>
+            ${historial.objetivos}</p>
+
+            <p><b>Evolución:</b>
+            ${historial.evolucion}</p>
+
+            <p><b>Observaciones:</b>
+            ${historial.observaciones}</p>
+
+            <p><b>Próxima cita:</b>
+            ${historial.proxima}</p>
+
+        </div>
+
+        `;
+    });
+}
+
+window.onload = function(){
+
+    let paciente =
+    localStorage.getItem("pacienteActual");
+
+    if(paciente){
+
+        document.getElementById("paciente").value =
+        paciente;
+    }
+
+    mostrarHistoriales();
+}
+
+</script>
+
+</body>
+</html>
